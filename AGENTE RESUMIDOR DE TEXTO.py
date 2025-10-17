@@ -11,8 +11,11 @@ app = Flask(__name__)
 @app.route('/resumir', methods=['POST'])
 def resumir():
     data = request.get_json()
-    texto = data.get('texto', '')
+    texto = data.get('texto', '').strip()
     porcentaje = int(data.get('porcentaje', 30))
+
+    if not texto:
+        return jsonify({"error": "Texto vacío", "resumen": []})
 
     frases = sent_tokenize(texto)
     total = len(frases)
@@ -24,10 +27,10 @@ def resumir():
 
     conocimiento = [{"frase": f, "peso": p} for f, p in zip(frases, pesos)]
     frases_ordenadas = sorted(conocimiento, key=lambda x: x["peso"], reverse=True)
-    seleccionadas = random.sample(frases_ordenadas[:total], cantidad)
+    seleccionadas = frases_ordenadas[:cantidad]
     resumen = [f["frase"] for f in seleccionadas]
 
     return jsonify({"resumen": resumen})
 
 if __name__ == '__main__':
-    app.run(port=5000)
+    app.run()
