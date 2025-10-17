@@ -4,7 +4,7 @@ import nltk
 from sklearn.feature_extraction.text import TfidfVectorizer
 from nltk.tokenize import sent_tokenize
 
-nltk.download('punkt')
+nltk.download('punkt_tab')
 
 app = Flask(__name__)
 
